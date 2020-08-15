@@ -1,0 +1,26 @@
+package ca.senecacollege.ws8;
+
+public class ReverseThread extends Thread {
+    private static int count;
+
+    public ReverseThread(int c) {
+        super("<" + c);
+        count = c;
+    }
+
+    public void run() {
+        ++count;
+        if (count <= 51) {
+            ReverseThread thread = new ReverseThread(count);
+            thread.start();
+
+            try {
+                thread.join();
+                System.out.println("Hello from Thread: " + this.getName() + ">");
+            } catch (Exception var3) {
+                System.out.println(var3);
+            }
+        }
+
+    }
+}
