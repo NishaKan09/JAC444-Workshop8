@@ -1,0 +1,61 @@
+package ca.senecacollege.ws8;
+
+import java.io.PrintStream;
+import java.util.Scanner;
+
+public class Main {
+    private static int rows_col = 2000;
+    private static long execution_time = System.currentTimeMillis();
+    private static double[][] mat1;
+    private static double[][] mat2;
+
+    public Main() {
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        Scanner in = new Scanner(System.in);
+        System.out.println("Enter 1 for Task 1, enter 2 for Task 2 or enter any other number to exit: ");
+        int ans = in.nextInt();
+        if (ans == 1) {
+            for(int i = 0; i < mat1.length; ++i) {
+                for(int j = 0; j < mat2[i].length; ++j) {
+                    mat1[i][j] = Math.random();
+                    mat2[i][j] = Math.random();
+                }
+            }
+
+            System.out.println("----------------------------------------------------------------------------------------");
+            Thread add = new Thread(String.valueOf(Task1.parallelAddMatrix(mat1, mat2)));
+            Thread add2 = new Thread(String.valueOf(Task1.parallelAddMatrix(mat1, mat2)));
+            Thread add3 = new Thread(String.valueOf(Task1.parallelAddMatrix(mat1, mat2)));
+            Thread add4 = new Thread(String.valueOf(Task1.parallelAddMatrix(mat1, mat2)));
+            add.start();
+            add2.start();
+            add3.start();
+            add4.start();
+            add.join();
+            add2.join();
+            add3.join();
+            add4.join();
+            PrintStream var10000 = System.out;
+            long var10001 = System.currentTimeMillis();
+            var10000.println("It takes: " + (var10001 - execution_time) + " milliseconds when using a thread to add matrices");
+            Task1.sequentialAddMatrix(mat1, mat2);
+            var10000 = System.out;
+            var10001 = System.currentTimeMillis();
+            var10000.println("It takes: " + (var10001 - execution_time) + " milliseconds when using a normal call to add matrices");
+            System.out.println("----------------------------------------------------------------------------------------");
+        } else if (ans == 2) {
+            ReverseThread thread = new ReverseThread(1);
+            thread.start();
+        } else {
+            System.out.close();
+        }
+
+    }
+
+    static {
+        mat1 = new double[rows_col][rows_col];
+        mat2 = new double[rows_col][rows_col];
+    }
+}
